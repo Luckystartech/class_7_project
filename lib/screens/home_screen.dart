@@ -7,11 +7,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        width: 500,
+        width: MediaQuery.sizeOf(context).width,
+        height: MediaQuery.sizeOf(context).height * 0.7,
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg_image.jpg'),
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
         ),
         child: Padding(
@@ -33,7 +34,7 @@ class HomeScreen extends StatelessWidget {
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text('Go to Catalog'),
@@ -43,13 +44,28 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       bottomSheet: Container(
-        height: 400,
+        height: MediaQuery.sizeOf(context).height * 0.45,
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Popular Products', style: TextStyle(fontSize: 28)),
+                TextButton(
+                  onPressed: () {},
+                  child: Text('View all', style: TextStyle(fontSize: 16, decoration: TextDecoration.underline, )),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
