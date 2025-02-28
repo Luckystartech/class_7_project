@@ -1,3 +1,6 @@
+import 'package:class_ecommerce_app/screens/product_screen.dart';
+import 'package:class_ecommerce_app/widgets/button_widget.dart';
+import 'package:class_ecommerce_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,16 +31,13 @@ class HomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              FilledButton(
-                onPressed: () {},
-                style: FilledButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: Text('Go to Catalog'),
+              ButtonWidget(
+                title: 'Go to Catalog',
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => ProductScreen()),
+                  );
+                },
               ),
             ],
           ),
@@ -60,11 +60,23 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text('Popular Products', style: TextStyle(fontSize: 28)),
                 TextButton(
-                  onPressed: () {},
-                  child: Text('View all', style: TextStyle(fontSize: 16, decoration: TextDecoration.underline, )),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ProductScreen()),
+                    );
+                  },
+                  child: Text(
+                    'View all',
+                    style: TextStyle(
+                      fontSize: 16,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ],
             ),
+
+            Row(children: [ProductCard(), ProductCard()]),
           ],
         ),
       ),
