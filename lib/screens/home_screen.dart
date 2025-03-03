@@ -1,84 +1,54 @@
-import 'package:class_ecommerce_app/screens/product_screen.dart';
-import 'package:class_ecommerce_app/widgets/button_widget.dart';
-import 'package:class_ecommerce_app/widgets/product_card.dart';
+// import 'package:class_ecommerce_app/screens/catalog.dart';
+import 'package:class_ecommerce_app/screens/favorites.dart';
+import 'package:class_ecommerce_app/screens/catalog.dart';
+import 'package:class_ecommerce_app/screens/profile.dart';
+import 'package:class_ecommerce_app/screens/search.dart';
 import 'package:flutter/material.dart';
+// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final List<Widget> screens = [
+    Catalog(),
+    Search(),
+    Favorites(),
+    Profile(),
+  ];
+
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: MediaQuery.sizeOf(context).width,
-        height: MediaQuery.sizeOf(context).height * 0.7,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/bg_image.jpg'),
-            fit: BoxFit.fill,
+      body: screens[selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: selectedIndex,
+        onTap: (currentIndex) {
+          selectedIndex = currentIndex;
+          setState(() {});
+        },
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.black38,
+        // showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Catalog',),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Favorites',
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 200),
-          child: Column(
-            children: [
-              Text(
-                'Renovate your Interior',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 48,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              ButtonWidget(
-                title: 'Go to Catalog',
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProductScreen()),
-                  );
-                },
-              ),
-            ],
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_outlined),
+            label: 'Profile',
           ),
-        ),
-      ),
-      bottomSheet: Container(
-        height: MediaQuery.sizeOf(context).height * 0.45,
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Popular Products', style: TextStyle(fontSize: 28)),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => ProductScreen()),
-                    );
-                  },
-                  child: Text(
-                    'View all',
-                    style: TextStyle(
-                      fontSize: 16,
-                      decoration: TextDecoration.underline,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            Row(children: [ProductCard(), ProductCard()]),
-          ],
-        ),
+        ],
       ),
     );
   }

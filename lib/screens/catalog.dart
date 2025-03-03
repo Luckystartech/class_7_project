@@ -1,9 +1,10 @@
-import 'package:class_ecommerce_app/widgets/button_widget.dart';
+import 'package:class_ecommerce_app/widgets/category.dart';
+import 'package:class_ecommerce_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class ProductScreen extends StatelessWidget {
-  const ProductScreen({super.key});
+class Catalog extends StatelessWidget {
+  const Catalog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +43,20 @@ class ProductScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ButtonWidget(title: 'Sofas', onPressed: () {}, borderRadius: 30, backgroundColor: Colors.grey.shade200,),
-                ButtonWidget(title: 'Chairs', onPressed: () {}, borderRadius: 30, backgroundColor: Colors.black, foregroundColor: Colors.white,),
-                ButtonWidget(title: 'Tables', onPressed: () {}, borderRadius: 30, backgroundColor: Colors.grey.shade200,),
-                ButtonWidget(title: 'Kitchen', onPressed: () {}, borderRadius: 30, backgroundColor: Colors.grey.shade200,),
-              ],
+            Category(),
+            Expanded(
+              child: GridView.builder(
+                itemCount: 10,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                  mainAxisExtent: 300,
+                ),
+                itemBuilder: (context, index) {
+                  return ProductCard();
+                },
+              ),
             ),
           ],
         ),
