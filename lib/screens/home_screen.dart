@@ -1,10 +1,8 @@
-// import 'package:class_ecommerce_app/screens/catalog.dart';
 import 'package:class_ecommerce_app/screens/favorites.dart';
 import 'package:class_ecommerce_app/screens/catalog.dart';
 import 'package:class_ecommerce_app/screens/profile.dart';
 import 'package:class_ecommerce_app/screens/search.dart';
 import 'package:flutter/material.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
