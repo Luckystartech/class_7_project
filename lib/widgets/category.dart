@@ -9,7 +9,7 @@ class Category extends StatefulWidget {
 }
 
 class _CategoryState extends State<Category> {
-  final List<String> categories = ['Sofas', 'Chairs', 'Tables', 'Kitchen'];
+  final List<String> categories = ['Beauty', 'Fragrances', 'furniture', 'groceries'];
 
   int selectedIndex = 0;
 

@@ -1,3 +1,4 @@
+import 'package:class_ecommerce_app/api/product_api_service.dart';
 import 'package:class_ecommerce_app/widgets/category.dart';
 import 'package:class_ecommerce_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
@@ -45,16 +46,34 @@ class Catalog extends StatelessWidget {
             const SizedBox(height: 20),
             Category(),
             Expanded(
-              child: GridView.builder(
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  mainAxisExtent: 300,
-                ),
-                itemBuilder: (context, index) {
-                  return ProductCard();
+              child: FutureBuilder(
+                future: ProductApiService.getProducts(),
+                builder: (context, snapShot) {
+                  //loading state
+                  if (snapShot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator.adaptive());
+                  }
+                  //error state
+                  if (snapShot.hasError) {
+                    return Center(child: Text(snapShot.error.toString()));
+                  }
+                  //null and empty
+                  if (snapShot.data == null || snapShot.data!.isEmpty) {
+                    return Center(child: Text('Oops, No Product Found'));
+                  }
+                  final products = snapShot.data;
+                  return GridView.builder(
+                    itemCount: products!.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      mainAxisExtent: 300,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ProductCard(product: products[index]);
+                    },
+                  );
                 },
               ),
             ),

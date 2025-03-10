@@ -1,6 +1,6 @@
 import 'package:class_ecommerce_app/screens/home_screen.dart';
 import 'package:class_ecommerce_app/widgets/button_widget.dart';
-import 'package:class_ecommerce_app/widgets/product_card.dart';
+// import 'package:class_ecommerce_app/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -76,7 +76,7 @@ class SplashScreen extends StatelessWidget {
               ],
             ),
 
-            Row(children: [ProductCard(), ProductCard()]),
+            // Row(children: [ProductCard(), ProductCard()]),
           ],
         ),
       ),

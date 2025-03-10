@@ -1,17 +1,23 @@
+import 'package:class_ecommerce_app/model/product.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetail extends StatefulWidget {
-  const ProductDetail({super.key});
+  const ProductDetail({super.key, required this.product});
+
+  final Product product;
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
 class _ProductDetailState extends State<ProductDetail> {
-  final List<String> imageUrls = [
-    'assets/images/chair_1.png',
-    'assets/images/chair_2.png',
-  ];
+  late List<String> imageUrls;
+
+  @override
+  void initState() {
+    imageUrls = widget.product.images;
+    super.initState();
+  }
 
   int selectedImageIndex = 0;
   @override
@@ -29,7 +35,7 @@ class _ProductDetailState extends State<ProductDetail> {
         padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
         child: Column(
           children: [
-            Image.asset(
+            Image.network(
               imageUrls[selectedImageIndex],
               height: MediaQuery.sizeOf(context).height * 0.4,
               fit: BoxFit.cover,
@@ -52,7 +58,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Image.asset(imageUrls[index], width: 80),
+                      child: Image.network(imageUrls[index], width: 80, height: 80,),
                     ),
                   ),
                 );
@@ -65,7 +71,7 @@ class _ProductDetailState extends State<ProductDetail> {
                   children: [
                     Icon(Icons.star, color: Colors.orange),
                     Text(
-                      '4.8',
+                      '${widget.product.rating}',
                       style: TextStyle(
                         color: Colors.orange,
                         fontSize: 24,
@@ -82,7 +88,7 @@ class _ProductDetailState extends State<ProductDetail> {
                     foregroundColor: Colors.black,
                   ),
                   child: Text(
-                    '145 reviews',
+                    '${widget.product.review.length} reviews',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -92,9 +98,12 @@ class _ProductDetailState extends State<ProductDetail> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Leset Galant',
-                  style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width * 0.6,
+                  child: Text(
+                    widget.product.title,
+                    style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 SizedBox(
                   width: 80,
@@ -123,22 +132,32 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
 
             const SizedBox(height: 10),
-            Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an"),
+            Text(
+              widget.product.description
+             ),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                Text('\$64.00', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),),
-                FilledButton(onPressed: (){}, style: FilledButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  minimumSize: Size(200, 60),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)
-                  )
-                ), child: Text('Add to cart'),)
-              ],),
-            )
+                  Text(
+                    '\$${widget.product.price}',
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                  FilledButton(
+                    onPressed: () {},
+                    style: FilledButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(200, 60),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Text('Add to cart'),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

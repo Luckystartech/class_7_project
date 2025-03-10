@@ -1,8 +1,11 @@
+import 'package:class_ecommerce_app/model/product.dart';
 import 'package:class_ecommerce_app/screens/product_detail.dart';
 import 'package:flutter/material.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  const ProductCard({super.key, required this.product});
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -10,21 +13,26 @@ class ProductCard extends StatelessWidget {
       onTap: () {
         Navigator.of(
           context,
-        ).push(MaterialPageRoute(builder: (context) => ProductDetail()));
+        ).push(MaterialPageRoute(builder: (context) => ProductDetail(product: product,)));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/images/chair_1.png',
-            width: 200,
-            fit: BoxFit.cover,
+          Image.network(
+            // loadingBuilder: (context, _, _) {
+            //   return CircularProgressIndicator();
+            // },
+            product.images[0],
+            width: 130,
+            height: 130,
+            fit: BoxFit.fitHeight,
           ),
           Text(
-            'Chester Chair',
+            textAlign: TextAlign.center,
+            product.title,
             style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          Text('\$61.00', style: TextStyle(fontSize: 18)),
+          Text('\$${product.price}', style: TextStyle(fontSize: 18)),
           SizedBox(
             width: 60,
             child: Row(

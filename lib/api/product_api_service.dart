@@ -12,7 +12,7 @@ class ProductApiService {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body)['products'] as List<dynamic>;
-        
+
         final products =
             data.map(((product) => Product.fromMap(product))).toList();
         return products;
@@ -21,7 +21,7 @@ class ProductApiService {
       }
     } catch (e) {
       log(e.toString());
-      
+
       throw Exception('Failed to Load Proucts');
     }
   }
