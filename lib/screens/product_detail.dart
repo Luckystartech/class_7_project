@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:class_ecommerce_app/model/product.dart';
+import 'package:class_ecommerce_app/providers/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProductDetail extends StatefulWidget {
   const ProductDetail({super.key, required this.product});
@@ -35,10 +38,16 @@ class _ProductDetailState extends State<ProductDetail> {
         padding: const EdgeInsets.only(left: 16.0, right: 16, bottom: 16),
         child: Column(
           children: [
-            Image.network(
-              imageUrls[selectedImageIndex],
+            CachedNetworkImage(
+              imageUrl: imageUrls[selectedImageIndex],
               height: MediaQuery.sizeOf(context).height * 0.4,
               fit: BoxFit.cover,
+              placeholder: (context, url) {
+                return CircularProgressIndicator.adaptive();
+              },
+              errorWidget: (context, url, error) {
+                return Center(child: Icon(Icons.error));
+              },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +67,17 @@ class _ProductDetailState extends State<ProductDetail> {
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Image.network(imageUrls[index], width: 80, height: 80,),
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrls[index],
+                        width: 80,
+                        height: 80,
+                        placeholder: (context, url) {
+                          return CircularProgressIndicator.adaptive();
+                        },
+                        errorWidget: (context, url, error) {
+                          return Center(child: Icon(Icons.error));
+                        },
+                      ),
                     ),
                   ),
                 );
@@ -132,9 +151,7 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
 
             const SizedBox(height: 10),
-            Text(
-              widget.product.description
-             ),
+            Text(widget.product.description),
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,17 +160,31 @@ class _ProductDetailState extends State<ProductDetail> {
                     '\$${widget.product.price}',
                     style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                   ),
-                  FilledButton(
-                    onPressed: () {},
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
-                      minimumSize: Size(200, 60),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    child: Text('Add to cart'),
+                  Consumer(
+                    builder: (context, ref, _) {
+                      return FilledButton(
+                        onPressed: () {
+                          ref
+                              .read(cartProvider.notifier)
+                              .addToCart(product: widget.product);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Product Added Successfull'),
+                            ),
+                          );
+                          // Navigator.of(context).pop(widget.product);
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(200, 60),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text('Add to cart'),
+                      );
+                    },
                   ),
                 ],
               ),
