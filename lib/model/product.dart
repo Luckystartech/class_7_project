@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:class_ecommerce_app/model/review.dart';
 
 class Product {
@@ -50,5 +52,15 @@ class Product {
       images: $images
     )''';
   }
-}
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Product && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
+}

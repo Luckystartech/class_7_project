@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:class_ecommerce_app/model/cart_item.dart';
 import 'package:class_ecommerce_app/model/product.dart';
 import 'package:class_ecommerce_app/providers/cart_provider.dart';
+import 'package:class_ecommerce_app/providers/favorite_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,9 +30,24 @@ class _ProductDetailState extends State<ProductDetail> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.favorite_border_outlined),
+          Consumer(
+            builder: (context, ref, _) {
+              final favoriteProducts = ref.watch(favoriteProvider);
+              // print(
+              //   'is favorite: ${favoriteProducts.contains(widget.product)}',
+              // );
+              return IconButton(
+                onPressed: () {
+                  ref
+                      .read(favoriteProvider.notifier)
+                      .toggleFavourite(product: widget.product);
+                },
+                icon:
+                    favoriteProducts.contains(widget.product)
+                        ? Icon(Icons.favorite, color: Colors.red)
+                        : Icon(Icons.favorite_border_outlined),
+              );
+            },
           ),
         ],
       ),
@@ -162,11 +179,51 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                   Consumer(
                     builder: (context, ref, _) {
+                      final cartItems = ref.watch(cartProvider).toList();
+                      if (cartItems.any(
+                        (cartItem) => cartItem.product == widget.product,
+                      )) {
+                        final cartItem = cartItems.firstWhere(
+                          (cartItem) => cartItem.product == widget.product,
+                        );
+                        // print(cartItem);
+                        return FilledButton(
+                        onPressed: () {
+                          ref
+                              .read(cartProvider.notifier)
+                              .addToCart(
+                                cartItem:
+                                    cartItem,
+                              );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Product Added Successfull'),
+                            ),
+                          );
+                          // Navigator.of(context).pop(widget.product);
+                        },
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(200, 60),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: Text('Add to cart'),
+                      );
+                      }
                       return FilledButton(
                         onPressed: () {
                           ref
                               .read(cartProvider.notifier)
-                              .addToCart(product: widget.product);
+                              .addToCart(
+                                cartItem:
+                                    CartItem(
+                                      itemCount: 1,
+                                      product: widget.product,
+                                    ),
+                              );
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('Product Added Successfull'),

@@ -2,7 +2,6 @@ import 'package:class_ecommerce_app/api/product_api_service.dart';
 import 'package:class_ecommerce_app/model/product.dart';
 import 'package:class_ecommerce_app/providers/cart_provider.dart';
 import 'package:class_ecommerce_app/screens/cart.dart';
-import 'package:class_ecommerce_app/screens/product_detail.dart';
 import 'package:class_ecommerce_app/widgets/button_widget.dart';
 // import 'package:class_ecommerce_app/widgets/category.dart';
 import 'package:class_ecommerce_app/widgets/product_card.dart';
@@ -26,12 +25,17 @@ class _CatalogState extends ConsumerState<Catalog> {
     'groceries',
   ];
 
- 
+  late Future<List<Product>> fetchProducts;
+
+  @override
+  void initState() {
+    fetchProducts = ProductApiService.getProducts();
+    super.initState();
+  }
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
-    final cart = ref.watch(cartProvider);
     final ktextStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -45,19 +49,24 @@ class _CatalogState extends ConsumerState<Catalog> {
         //   icon: Icon(Icons.arrow_back),
         // ),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => Cart()),
+          Consumer(
+            builder: (context, ref, _) {
+              final cart = ref.watch(cartProvider);
+              return IconButton(
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Cart()));
+                },
+                icon:
+                    cart.isEmpty
+                        ? Icon(Icons.shopping_cart_outlined)
+                        : Badge.count(
+                          count: cart.length,
+                          child: Icon(Icons.shopping_cart_outlined),
+                        ),
               );
-            },
-            icon:
-                cart.isEmpty
-                    ? Icon(Icons.shopping_cart_outlined)
-                    : Badge.count(
-                      count: cart.length,
-                      child: Icon(Icons.shopping_cart_outlined),
-                    ),
+            }
           ),
           const SizedBox(width: 10),
           Padding(
@@ -109,7 +118,7 @@ class _CatalogState extends ConsumerState<Catalog> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: ProductApiService.getProducts(),
+                future: fetchProducts,
                 builder: (context, snapShot) {
                   //loading state
                   if (snapShot.connectionState == ConnectionState.waiting) {
@@ -142,8 +151,7 @@ class _CatalogState extends ConsumerState<Catalog> {
                       mainAxisExtent: 300,
                     ),
                     itemBuilder: (context, index) {
-                      return ProductCard(product: products[index],
-                      );
+                      return ProductCard(product: products[index]);
                     },
                   );
                 },
