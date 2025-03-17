@@ -52,6 +52,8 @@ class _CatalogState extends ConsumerState<Catalog> {
           Consumer(
             builder: (context, ref, _) {
               final cart = ref.watch(cartProvider);
+              // final count = cart.length * cart.map((item)=> item.itemCount).first;
+              
               return IconButton(
                 onPressed: () {
                   Navigator.of(
@@ -66,7 +68,7 @@ class _CatalogState extends ConsumerState<Catalog> {
                           child: Icon(Icons.shopping_cart_outlined),
                         ),
               );
-            }
+            },
           ),
           const SizedBox(width: 10),
           Padding(

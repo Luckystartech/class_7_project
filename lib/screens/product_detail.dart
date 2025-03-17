@@ -179,68 +179,31 @@ class _ProductDetailState extends State<ProductDetail> {
                   ),
                   Consumer(
                     builder: (context, ref, _) {
-                      final cartItems = ref.watch(cartProvider).toList();
-                      if (cartItems.any(
-                        (cartItem) => cartItem.product == widget.product,
-                      )) {
-                        final cartItem = cartItems.firstWhere(
-                          (cartItem) => cartItem.product == widget.product,
-                        );
-                        // print(cartItem);
-                        return FilledButton(
-                        onPressed: () {
-                          ref
-                              .read(cartProvider.notifier)
-                              .addToCart(
-                                cartItem:
-                                    cartItem,
-                              );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Product Added Successfull'),
-                            ),
-                          );
-                          // Navigator.of(context).pop(widget.product);
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(200, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        child: Text('Add to cart'),
-                      );
-                      }
                       return FilledButton(
-                        onPressed: () {
-                          ref
-                              .read(cartProvider.notifier)
-                              .addToCart(
-                                cartItem:
-                                    CartItem(
-                                      itemCount: 1,
-                                      product: widget.product,
-                                    ),
-                              );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text('Product Added Successfull'),
+                          onPressed: () {
+                            ref
+                                .read(cartProvider.notifier)
+                                .addToCart(
+                                  product: widget.product,
+                                );
+                                print('first time adding to cart');
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Product Added Successfull'),
+                              ),
+                            );
+                            // Navigator.of(context).pop(widget.product);
+                          },
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            minimumSize: Size(200, 60),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          );
-                          // Navigator.of(context).pop(widget.product);
-                        },
-                        style: FilledButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(200, 60),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ),
-                        child: Text('Add to cart'),
-                      );
+                          child: Text('Add to cart'),
+                        );
                     },
                   ),
                 ],
