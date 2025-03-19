@@ -23,10 +23,18 @@ class Review {
     );
   }
 
+  Map<String, dynamic> toMap(Review review) {
+    return {
+      'rating': review.rating,
+      'comment': review.comment,
+      'date': review.date,
+      'reviewerName': review.reviewerName,
+      'reviewerEmail': review.reviewerEmail,
+    };
+  }
+
   @override
   String toString() {
     return 'Review(rating: $rating, comment: $comment, date: $date, reviewerName: $reviewerName, reviewerEmail: $reviewerEmail)';
   }
 }
-
-

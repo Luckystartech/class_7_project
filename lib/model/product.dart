@@ -1,4 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert';
+
+
 
 import 'package:class_ecommerce_app/model/review.dart';
 
@@ -37,6 +39,21 @@ class Product {
               .toList(),
       images: (map['images'] as List).cast<String>(),
     );
+  }
+
+  Map<String, dynamic> toMap(Product product) {
+    return {
+      'id': product.id,
+      'title': product.title,
+      'description': product.description,
+      'category': product.category,
+      'price': product.price,
+      'rating': rating,
+      //the issue
+      'reviews': review.map((v)=> v.toMap(v)).toList(),
+      //the issue
+      'images': product.images
+    };
   }
 
   @override

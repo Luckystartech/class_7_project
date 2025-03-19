@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:class_ecommerce_app/model/product.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 class ProductApiService {
@@ -26,6 +27,10 @@ class ProductApiService {
     }
   }
 }
+
+final productsProvider = FutureProvider((ref) async {
+  return await ProductApiService.getProducts();
+});
 
 // void main() async {
 //   final products = await ProductApiService.getProducts();

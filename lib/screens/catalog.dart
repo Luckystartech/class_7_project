@@ -25,17 +25,18 @@ class _CatalogState extends ConsumerState<Catalog> {
     'groceries',
   ];
 
-  late Future<List<Product>> fetchProducts;
+  // late Future<List<Product>> fetchProducts;
 
-  @override
-  void initState() {
-    fetchProducts = ProductApiService.getProducts();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   fetchProducts = ProductApiService.getProducts();
+  //   super.initState();
+  // }
 
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final fetchProducts = ref.watch(productsProvider);
     final ktextStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -53,7 +54,7 @@ class _CatalogState extends ConsumerState<Catalog> {
             builder: (context, ref, _) {
               final cart = ref.watch(cartProvider);
               // final count = cart.length * cart.map((item)=> item.itemCount).first;
-              
+
               return IconButton(
                 onPressed: () {
                   Navigator.of(
@@ -119,6 +120,38 @@ class _CatalogState extends ConsumerState<Catalog> {
               ),
             ),
             Expanded(
+              child: fetchProducts.when(
+                data: (rawProducts) {
+                  final products =
+                      selectedIndex == 0
+                          ? rawProducts
+                          : rawProducts
+                              .where(
+                                (product) =>
+                                    product.category.toLowerCase() ==
+                                    categories[selectedIndex].toLowerCase(),
+                              )
+                              .toList();
+                  return GridView.builder(
+                    itemCount: products.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                      mainAxisExtent: 300,
+                    ),
+                    itemBuilder: (context, index) {
+                      return ProductCard(product: products[index]);
+                    },
+                  );
+                },
+                error: (error, st) => Center(child: Text(error.toString())),
+                loading:
+                    () => Center(child: CircularProgressIndicator.adaptive()),
+              ),
+            ),
+            /*
+            Expanded(
               child: FutureBuilder(
                 future: fetchProducts,
                 builder: (context, snapShot) {
@@ -159,6 +192,7 @@ class _CatalogState extends ConsumerState<Catalog> {
                 },
               ),
             ),
+            */
           ],
         ),
       ),
